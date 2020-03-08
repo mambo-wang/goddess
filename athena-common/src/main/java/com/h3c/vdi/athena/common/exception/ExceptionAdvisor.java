@@ -41,4 +41,25 @@ public class ExceptionAdvisor {
         return new DefaultErrorDTO(ex.getErrorCode(), ex.getMessage());
     }
 
+    @ExceptionHandler(BasicHttpException.class)
+    public DefaultErrorDTO handleHttpException(BasicHttpException ex, HttpServletResponse response) {
+        response.setStatus(ex.getStatus());
+        return new DefaultErrorDTO(ex.getErrorCode(), ex.getMessage());
+    }
+
+    @ExceptionHandler(HystrixRuntimeException.class)
+    public DefaultErrorDTO handleHystrixRuntimeException(HystrixRuntimeException ex, HttpServletResponse response) {
+        Throwable cause = ex.getCause();
+        if(cause instanceof BasicHttpException){
+            response.setStatus(((BasicHttpException)cause).getStatus());
+            return new DefaultErrorDTO(((AppException) cause).getErrorCode(), cause.getMessage());
+        }
+        if (cause instanceof AppException) {
+            response.setStatus(HttpStatus.CONFLICT.value());
+            return new DefaultErrorDTO(((AppException) cause).getErrorCode(), cause.getMessage());
+        }
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return new DefaultErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+    }
+
 }

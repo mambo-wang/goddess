@@ -2,6 +2,7 @@ package com.h3c.vdi.athena.common.decoder;
 
 import com.google.gson.Gson;
 import com.h3c.vdi.athena.common.exception.AppException;
+import com.h3c.vdi.athena.common.exception.BasicHttpException;
 import com.h3c.vdi.athena.common.model.DefaultExceptionInfo;
 import feign.Response;
 import feign.Util;
