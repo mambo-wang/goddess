@@ -1,0 +1,15 @@
+server:
+  port: 9411
+spring:
+  application:
+    name: athena-hystrix-dashboard
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    perfer-ip-address: true
+turbine:
+#配置监控哪些微服务
+  appConfig: athena-webapp,athena-gateway,athena-homework,athena-keystone
+  clusterNameExpression: "'default'"

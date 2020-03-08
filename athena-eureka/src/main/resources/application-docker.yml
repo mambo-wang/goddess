@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: athena-eureka
+server:
+  port: ${EUREKA_INSTANCE_PORT}
+eureka:
+  instance:
+    #hostname: athena-eureka
+    prefer-ip-address: false
+    appname: ${spring.application.name}
+  client:
+    registerWithEureka: false
+    fetchRegistry: false

@@ -1,0 +1,26 @@
+server:
+  port: ${CONFIG_PORT}
+spring:
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: /root/athena/properties/{application}
+  application:
+    name: athena-config
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/athena-config?useSSL=false
+    username: root
+    password: 1q2w3e
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_INSTANCE_HOSTNAME}:${EUREKA_INSTANCE_PORT}/eureka/
+logging:
+  level:
+    org.springframework.cloud: debug #调整为debug能更清楚地看到请求git配置文件的过程
+    org.springframework.boot: debug
+

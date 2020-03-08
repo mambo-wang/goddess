@@ -1,0 +1,48 @@
+server:
+  port: ${CONFIG_PORT}
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  application:
+    name: athena-config
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/athena-config?useSSL=false
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PWD}
+  zipkin:
+    base-url: http://${HYSTRIX_HOSTNAME}:${HYSTRIX_PORT}
+  sleuth:
+    sampler:
+      percentage: 1.0  #默认为0.1
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_INSTANCE_HOSTNAME}:${EUREKA_INSTANCE_PORT}/eureka/
+  instance:
+      prefer-ip-address: true
+mybatis:
+  type-aliases-package: com.h3c.vdi.athena.configserver.model.entity
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 60000 #延长触发熔断超时时间，解决第一次请求报Timeout的问题
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  ReadTimeout: 60000
+  SocketTimeout: 60000
+  ConnectTimeout: 60000

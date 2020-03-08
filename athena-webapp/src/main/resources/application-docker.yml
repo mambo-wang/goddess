@@ -1,0 +1,51 @@
+server:
+  port: ${WEBAPP_PORT}
+  tomcat:
+    uri-encoding: UTF-8
+feign:
+  hystrix:
+    enabled: false
+  httpclient:
+    enabled: true
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 60000 #延长触发熔断超时时间，解决第一次请求报Timeout的问题
+zuul:
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_INSTANCE_HOSTNAME}:${EUREKA_INSTANCE_PORT}/eureka/
+  instance:
+    prefer-ip-address: true #将自己的IP注册到Eureka Server
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  healthcheck:
+    enabled: true #把微服务健康状态传播到Eureka Server
+logging:
+  level:
+    com.h3c.vdi.athena.webapp.service: DEBUG
+
+management:
+  security:
+    enabled: false
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 2048MB
+  zipkin:
+    base-url: http://${HYSTRIX_HOSTNAME}:${HYSTRIX_PORT}
+  sleuth:
+    sampler:
+      percentage: 1.0  #默认为0.1

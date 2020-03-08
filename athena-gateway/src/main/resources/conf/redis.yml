@@ -1,0 +1,24 @@
+redis:
+  #redis所在master节点ip地址
+  host: 192.168.0.225
+  # redis端口号
+  port: 6379
+  #密码
+  password: abcd
+  #客户端超时时间，单位毫秒，默认2000
+  timeout: 2000
+  #连接池最大空闲数
+  maxIdle: 8
+  #控制一个pool可分配多少个jedis实例
+  maxTotal: 10
+  #最大建立连接等待时间，-1表示无限制
+  maxWaitMillis: 1000
+  #连接的最小空闲时间：默认30分钟
+  minEvictableIdleTimeMillis: 300000
+  #连接池中的最小空闲连接，默认0
+  minIdle: 0
+  #使用哪个数据库
+  database: 0
+
+
+

@@ -1,0 +1,55 @@
+server:
+  port: 8882
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  application:
+    name: athena-homework
+  datasource:
+    #url: jdbc:mysql://192.168.0.225:3307/athena_base?useSSL=false
+    url: jdbc:mysql://192.168.3.224:3306/athena-homework?useSSL=false
+    username: root
+    password: cloudos
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+  zipkin:
+    base-url: http://192.168.0.225:9411
+  sleuth:
+    sampler:
+      percentage: 1.0  #默认为0.1
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.0.225:8761/eureka/
+  instance:
+      prefer-ip-address: true
+#超时时间配置，方便联调。
+ribbon:
+  ReadTimeout: 60000
+  SocketTimeout: 60000
+  ConnectTimeout: 60000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 60000 #延长触发熔断超时时间，解决第一次请求报Timeout的问题
+feign:
+  hystrix:
+    enabled: true
+logging:
+  level:
+    com.h3c.vdi.athena.homework.service.user.UserFeignService: DEBUG

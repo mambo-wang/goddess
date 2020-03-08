@@ -1,0 +1,15 @@
+server:
+  port: ${HYSTRIX_PORT}
+spring:
+  application:
+    name: athena-hystrix-dashboard
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_INSTANCE_HOSTNAME}:${EUREKA_INSTANCE_PORT}/eureka/
+  instance:
+      perfer-ip-address: true
+turbine:
+#配置监控哪些微服务
+  appConfig: athena-webapp,athena-gateway,athena-homework,athena-keystone,athena-netdisk
+  clusterNameExpression: "'default'"

@@ -1,0 +1,26 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: athena-config
+  cloud:
+    config:
+      server:
+        git:
+          uri: http://192.168.1.75/w14014/{application}.git    # 配置Git仓库的地址
+          username: w14014                                                        # Git仓库的账号
+          password: wang@1991                                                     # Git仓库的密码
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://athena-eureka:8761/eureka/
+logging:
+  level:
+    org.springframework.cloud: debug #调整为debug能更清楚地看到请求git配置文件的过程
+    org.springframework.boot: debug
+security:
+  basic:
+    enabled: true               # 开启基于HTTP basic的认证
+  user:
+    name: user                  # 配置登录的账号是user
+    password: 123456       # 配置登录的密码是123456

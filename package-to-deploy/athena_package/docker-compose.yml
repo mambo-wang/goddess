@@ -1,0 +1,82 @@
+version: '3'
+services:
+  athena-eureka:
+    image: "athena-eureka:1.0-E0101"
+    restart: always
+    build: athena-eureka/target
+    volumes:
+      - /opt/H3C/athena/logs:/opt/H3C/athena/logs
+    ports:
+      - 8761:8761
+    container_name: athena-eureka
+
+  athena-config:
+    image: "athena-config:1.0-E0101"
+    restart: always
+    build: athena-config/target
+    ports:
+      - 8888:8888
+    volumes:
+      - /opt/H3C/athena/logs:/opt/H3C/athena/logs
+      - /opt/H3C/athena/properties:/root/athena/properties
+    container_name: athena-config
+
+  athena-hystrix-dashboard:
+    image: "athena-hystrix-dashboard:1.0-E0101"
+    restart: always
+    build: athena-hystrix-dashboard/target
+    volumes:
+      - /opt/H3C/athena/logs:/opt/H3C/athena/logs
+    ports:
+      - 9411:9411
+    container_name: athena-hystrix-dashboard
+
+  athena-gateway:
+    image: "athena-gateway:1.0-E0101"
+    restart: always
+    build: athena-gateway/target
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+    container_name: athena-gateway
+
+  athena-homework:
+    image: "athena-homework:1.0-E0101"
+    restart: always
+    build: athena-homework/target
+    #挂载本地磁盘到容器下的某个路径，用于存放作业文件
+    volumes:
+      - /opt/H3C/athena/logs:/opt/H3C/athena/logs
+      - /opt/H3C/athena/homework:/homeworkfiles
+    container_name: athena-homework
+  
+  athena-keystone:
+    image: "athena-keystone:1.0-E0101"
+    restart: always
+    build: athena-keystone/target
+    volumes:
+      - /opt/H3C/athena/logs:/opt/H3C/athena/logs
+    container_name: athena-keystone
+
+  athena-webapp:
+    image: "athena-webapp:1.0-E0101"
+    restart: always
+    build: athena-webapp/target
+    depends_on:
+      - athena-config
+    volumes:
+      - /opt/H3C/athena/logs:/opt/H3C/athena/logs
+    ports:
+      - 8883:8883
+    container_name: athena-webapp
+
+  athena-fronted:
+    image: "nginx:latest"
+    restart: always
+    volumes:
+      - /opt/H3C/athena/athena_package/athena-fronted/www:/usr/share/nginx/html:ro
+      - /opt/H3C/athena/athena_package/athena-fronted/conf.d:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    container_name: athena-fronted    

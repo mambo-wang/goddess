@@ -1,0 +1,58 @@
+server:
+  port: ${GATEWAY_PORT}
+spring:
+  application:
+    name: athena-gateway
+  zipkin:
+    base-url: http://${HYSTRIX_HOSTNAME}:${HYSTRIX_PORT}
+  sleuth:
+    sampler:
+      percentage: 1.0  #默认为0.1
+  http:
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 2048MB
+zuul:
+  routes:
+    base:
+      path: /keystone/**
+      serviceId: athena-keystone
+    homework:
+      path: /homework/**
+      serviceId: athena-homework
+    netdisk:
+      path: /netdisk/**
+      serviceId: athena-netdisk
+    config:
+      path: /config/**
+      serviceId: athena-config
+  add-host-header: true
+  sensitive-headers:
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_INSTANCE_HOSTNAME}:${EUREKA_INSTANCE_PORT}/eureka/  #host改为镜像名
+  instance:
+      prefer-ip-address: true
+#超时时间配置，方便联调。
+ribbon:
+  ReadTimeout: 60000
+  SocketTimeout: 60000
+  ConnectTimeout: 60000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 60000
+logging:
+  level:
+    com.h3c.vdi.athena.gateway.rest.base.UserService: DEBUG
+feign:
+  hystrix:
+    enabled: true

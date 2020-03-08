@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db:
+    image: "mysql:5.7"
+    volumes:
+      - /opt/H3C/athena/nextcloud/mysql:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "3309:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD:1q2w3e
+      - MYSQL_DATABASE:nextcloud
+    restart: always
+    container_name: mysql-nextcloud
+  nextcloud:
+    image: "nextcloud:latest"
+    volumes:
+      - /opt/H3C/athena/nextcloud/config:/var/www/html/config
+      - /opt/H3C/athena/nextcloud/data:/var/www/html/data
+      - /opt/H3C/athena/nextcloud/apps:/var/www/html/apps
+    expose:
+     - "80"
+     - "443"
+    links:
+     - db
+    ports:
+     - "8081:80"
+     - "9440:443"
+    restart: always
+    container_name: nextcloud
+  

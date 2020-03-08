@@ -1,0 +1,27 @@
+server:
+  port: 8888
+spring:
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: /root/athena/properties/{application}
+  application:
+    name: athena-config
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.0.225:3308/athena-config?useSSL=false
+    username: root
+    password: 1q2w3e
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.0.225:8761/eureka/
+logging:
+  level:
+    org.springframework.cloud: debug #调整为debug能更清楚地看到请求git配置文件的过程
+    org.springframework.boot: debug
+mybatis:
+  type-aliases-package: com.h3c.vdi.athena.netdisk.model.entity
